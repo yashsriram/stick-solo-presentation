@@ -1,40 +1,134 @@
 <!doctype html>
 <html>
-	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <head>
+  <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-		<title>reveal.js</title>
+    <title>Presentation for Tesla Onsite</title>
 
-		<link rel="stylesheet" href="dist/reset.css">
-		<link rel="stylesheet" href="dist/reveal.css">
-		<link rel="stylesheet" href="dist/theme/black.css">
+    <link rel="stylesheet" href="dist/reset.css">
+    <link rel="stylesheet" href="dist/reveal.css">
+    <link rel="stylesheet" href="dist/theme/black.css">
 
-		<!-- Theme used for syntax highlighted code -->
-		<link rel="stylesheet" href="plugin/highlight/monokai.css">
-	</head>
-	<body>
-		<div class="reveal">
-			<div class="slides">
-				<section>Slide 1</section>
-				<section>Slide 2</section>
-			</div>
-		</div>
+    <!-- Theme used for syntax highlighted code -->
+    <link rel="stylesheet" href="plugin/highlight/monokai.css">
+  </head>
+  <body>
+    <div class="reveal">
+      <div class="slides">
 
-		<script src="dist/reveal.js"></script>
-		<script src="plugin/notes/notes.js"></script>
-		<script src="plugin/markdown/markdown.js"></script>
-		<script src="plugin/highlight/highlight.js"></script>
-		<script>
-			// More info about initialization & config:
-			// - https://revealjs.com/initialization/
-			// - https://revealjs.com/config/
-			Reveal.initialize({
-				hash: true,
+        <section>
+          <h2>
+              <span class="fragment fade-in-then-semi-out">Motion planning for</span>
+              <span class="fragment fade-in-then-semi-out">2D</span>
+              <span class="fragment fade-in-then-semi-out">stick-figure</span>
+              <span class="fragment fade-in-then-semi-out">climbing agents</span>
+          </h2>
+          <p>
+            <small>Created by <a href="https://github.com/buggedbit/">Yashasvi Sriram Patkuri</a></small>
+          </p>
+        </section>
 
-				// Learn about plugins: https://revealjs.com/plugins/
-				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ]
-			});
-		</script>
-	</body>
+        <section>my intro, interests hobbies, project demo clips, climbing clips</section>
+
+        <section>
+          <section>
+          the problem
+          </section>
+          <section>
+            <h2>the world</h2>
+            <ul>
+            <li class="fragment">2D wall</li>
+            <li class="fragment">points representing holds</li>
+            <li class="fragment">has a start hold and a finish hold</li>
+            </ul>
+            <img class="fragment" width="500px" src="media/world.png">
+          </section>
+          <section>
+            <h2>chain agent</h2>
+            <ul>
+            <li class="fragment">line segments connected via revolute joints</li>
+            <li class="fragment">can be chained</li>
+            <li class="fragment">one free end can latch to a hold in wall</li>
+            <li class="fragment">controlled via joint angles</li>
+            <li class="fragment">N line segments gives N "R" joints (including latch)</li>
+            </ul>
+            <img class="fragment" width="800px" src="media/4R.png">
+          </section>
+          <section>
+            Other chains
+            <img src="media/chains.png">
+          </section>
+          <section>
+            <h2>tree agent</h2>
+            <ul>
+            <li class="fragment">chain agents in a tree structure</li>
+            <li class="fragment">one free end of a chain agent can latch to a hold in wall</li>
+            <li class="fragment">controlled via joint angles, but has hierarchical control</li>
+            </ul>
+            <img class="fragment" width="800px" src="media/2x2R.png">
+          </section>
+          <section>
+            3 x 2R can be in two configurations, note the coincident controls and multiple free ends
+            <img src="media/3x2R.png">
+          </section>
+          <section>
+          <table>
+            <tbody>
+              <tr>
+                <th style="padding: 0">4R (chain)</th>
+                <th style="padding: 0">2 x 2R (tree)</th>
+              </tr>
+              <tr class="fragment">
+                <th style="padding: 0"><img width="400px" src="media/4R.png"/></th>
+                <th style="padding: 0"><img width="400px" src="media/2x2R.png"/></th>
+              </tr>
+              <tr class="fragment">
+                <td ><span style="font-size: 0.4em">both translation and rotation is transferred down the chain</span></td>
+                <td ><span style="font-size: 0.4em">hierarchical control, only translation is transferred down the tree</span></td>
+              </tr>
+              <tr class="fragment">
+                <th style="padding: 0"><img width="300px" src="media/4R-rot.png"/></th>
+                <th style="padding: 0"><img width="300px" src="media/2x2R-rot.png"/></th>
+              </tr>
+            </tbody>
+          </table>
+          </section>
+          <section>
+            <h2>the task</h2>
+            <ul>
+            <li class="fragment">To plan the motion of an agent in realtime, so that it reaches the finish hold following the world rules</li>
+            <li class="fragment">To make the motion natural (human/animal-like) using simple heuristics</li>
+            </ul>
+          </section>
+        </section>
+
+        <section>
+            <h2>the motivation</h2>
+            <ul>
+            <li class="fragment">In games, this can be used to improve climbing character animation</li>
+            <li class="fragment">As robots, they can climb difficult and challenging terrain for reconnaissance and rescue missions</li>
+            <li class="fragment">Can generate new climbing routes and detect dangerous ones</li>
+            <li class="fragment">Super fun to watch agents/robots climb walls</li>
+            </ul>
+        </section>
+      </div>
+    </div>
+
+    <script src="dist/reveal.js"></script>
+    <script src="plugin/notes/notes.js"></script>
+    <script src="plugin/markdown/markdown.js"></script>
+    <script src="plugin/highlight/highlight.js"></script>
+    <script>
+      // More info about initialization & config:
+      // - https://revealjs.com/initialization/
+      // - https://revealjs.com/config/
+      Reveal.initialize({
+        hash: true,
+
+        // Learn about plugins: https://revealjs.com/plugins/
+        plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ]
+      });
+    </script>
+  </body>
 </html>

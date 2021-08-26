@@ -34,7 +34,6 @@
           <section>
               <h2>Me</h2>
               <ul>
-              <li class="fragment">Yashasvi Sriram</li>
               <li class="fragment">@buggedbit</li>
               <li class="fragment">MS, CS @ UMN</li>
               <li class="fragment">BTech, CSE @ IIT Bombay</li>
@@ -46,7 +45,7 @@
               <li class="fragment">Bringing math to life</li>
               <li class="fragment">Climbing, Paddle sports, Surfing</li>
               <li class="fragment">Trying new things in general</li>
-              <li class="fragment">Planning, Sensing, Physical simulations</li>
+              <li class="fragment">Planning, Sensing, Robots, Autonomous Cars</li>
               </ul>
           </section>
         </section>
@@ -69,7 +68,7 @@
             <ul>
             <li class="fragment">line segments connected via revolute joints</li>
             <li class="fragment">can be chained</li>
-            <li class="fragment">one free end can latch to a hold in wall</li>
+            <li class="fragment">one free end can latch to a hold in wall (pivot)</li>
             <li class="fragment">controlled via joint angles</li>
             <li class="fragment">N line segments gives N "R" joints (including latch)</li>
             </ul>
@@ -82,8 +81,9 @@
           <section>
             <h2>the task</h2>
             <ul>
-            <li class="fragment">To plan the motion of an agent in realtime, so that it reaches the finish hold following the world rules</li>
-            <li class="fragment">To make the motion natural (human/animal-like) using simple heuristics</li>
+            <li class="fragment">Plan and reach</li>
+            <li class="fragment">Be real-time</li>
+            <li class="fragment">Make motion natural using simple heuristics</li>
             </ul>
           </section>
         </section>
@@ -197,7 +197,7 @@
             <li class="fragment">Given goal point is in the span</li>
             <img class="fragment" width="300px" src="media/images/nR-PI1.png" />
             <img class="fragment" width="250px" src="media/images/nR-PI2.png" />
-            <li class="fragment">produces shorted free end path</li>
+            <li class="fragment">produces shortest free end path</li>
             <li class="fragment">contains matrix inversion, so can be numerically unstable</li>
             </section>
             <section>
@@ -209,7 +209,7 @@
             <ul>
               <li class="fragment">With proper PRM edge lens, PRM path existence guarantees reachability</li>
               <li class="fragment">One IK gradient step per tick</li>
-              <li class="fragment">Multiple solutions exist, no control over what we are convering onto</li>
+              <li class="fragment">Multiple solutions exist, no control over what we are converging onto</li>
             </ul>
             </section>
             <!-- <section> -->
@@ -226,7 +226,7 @@
             </ul>
             </section>
             <section>
-            <h2>Two arm</h2>
+              <h2>Two arm as 2 independent nR chains</h2>
             <ul>
               <li class="fragment">Two arms modeled using 2 nR chains</li>
               <li class="fragment">Independent motion but connected at neck</li>
@@ -307,7 +307,7 @@
             <h2>Cons - Until now</h2>
             <ul>
               <li class="fragment">No control over descent i.e. pose attained</li>
-              <li class="fragment"><img width="400px" src="media/images/badpose.png"/></li>
+              <li class="fragment"><img width="300px" src="media/images/badpose.png"/></li>
               <li class="fragment">No multi limb coordination</li>
               <li class="fragment">No considerations of gravity</li>
               <li class="fragment">No variance in generated motion during IK phase</li>
@@ -316,9 +316,9 @@
             <section>
             <h2>Fixes</h2>
             <ul>
-              <li class="fragment">To prevent unwanted poses the joint angle domain can be restricted. Previously $(-\infty, \infty)$, now something like $[-30^\circ, 60^\circ]$</li>
-              <li class="fragment">To enable multi limb coordination instead of modelling two arms as independent nR chains, model it as single 2nR chain</li>
-              <li class="fragment">To add the effect of gravity, add center of mass terms into gradient descent</li>
+              <li class="fragment">Model two arms as a single chain instead of 2 independent chains</li>
+              <li class="fragment">Add center of mass terms into gradient descent</li>
+              <li class="fragment">Clamp joint angles. Previously $(-\infty, \infty)$, now something like $[-30^\circ, 60^\circ]$</li>
             </ul>
             </section>
         </section>
@@ -409,15 +409,15 @@
           </ul>
           <img class="fragment" width="800px" src="media/images/snapping.png"/>
           </section>
-          <section>
-          <h2>Perks</h2>
-          <ul>
-            <li class="fragment">Due to impl detail, clamps could not be enfored on first and last angles</li>
-            <li class="fragment">But with monte carlo methods we can enforce (pseudo) clamps while sampling</li>
-          </ul>
-          <img class="fragment" width="400px" src="media/images/5.0.wrong_side.gif"/>
-          <img class="fragment" width="400px" src="media/images/5.1.solve_wrong_side.gif"/>
-          </section>
+          <!-- <section> -->
+          <!-- <h2>Perks</h2> -->
+          <!-- <ul> -->
+          <!--   <li class="fragment">Due to impl detail, clamps could not be enfored on first and last angles</li> -->
+          <!--   <li class="fragment">But with monte carlo methods we can enforce (pseudo) clamps while sampling</li> -->
+          <!-- </ul> -->
+          <!-- <img class="fragment" width="400px" src="media/images/5.0.wrong_side.gif"/> -->
+          <!-- <img class="fragment" width="400px" src="media/images/5.1.solve_wrong_side.gif"/> -->
+          <!-- </section> -->
           <section>
           <h2>Perks</h2>
           <ul>
@@ -425,21 +425,21 @@
           </ul>
           <img class="fragment" width="800px" src="media/images/6.4.out.gif"/>
           </section>
-          <section>
-          <h2>Matching hands</h2>
-          <ul>
-            <li>Always switching pivots won't work</li>
-          </ul>
-          <img width="800px" src="media/images/7.2.switching_failure.gif"/>
-          </section>
-          <section>
-          <h2>Matching hands</h2>
-          <ul>
-            <li class="fragment">Simple climbers solution, match hands</li>
-            <li class="fragment">If agent is reaching with left hand but goal on on right of pivot (or) If agent is reaching with right hand but goal on on left of pivot</li>
-          </ul>
-          <img class="fragment" width="600px" src="media/images/7.3.matching.gif"/>
-          </section>
+          <!-- <section> -->
+          <!-- <h2>Matching hands</h2> -->
+          <!-- <ul> -->
+          <!--   <li>Always switching pivots won't work</li> -->
+          <!-- </ul> -->
+          <!-- <img width="800px" src="media/images/7.2.switching_failure.gif"/> -->
+          <!-- </section> -->
+          <!-- <section> -->
+          <!-- <h2>Matching hands</h2> -->
+          <!-- <ul> -->
+          <!--   <li class="fragment">Simple climbers solution, match hands</li> -->
+          <!--   <li class="fragment">If agent is reaching with left hand but goal on on right of pivot (or) If agent is reaching with right hand but goal on on left of pivot</li> -->
+          <!-- </ul> -->
+          <!-- <img class="fragment" width="600px" src="media/images/7.3.matching.gif"/> -->
+          <!-- </section> -->
         </section>
 
         <section>
@@ -471,9 +471,7 @@
             <section>
             <h2>Cons - Until now</h2>
             <ol>
-              <li class="fragment">4R is good but solve is not generalizable for 4 arm agent</li>
-              <li class="fragment">i.e. not very composable</li>
-              <li class="fragment">Should not have to write code specific to agent topology</li>
+              <li class="fragment">2 arms as 4R is good but solve is not generalizable for 4 arm agent</li>
               <li class="fragment">Monte carlo method becomes quickly untracable as chain size increases</li>
             </ol>
             <ul>
@@ -492,7 +490,7 @@
             <h2>tree agent</h2>
             <ul>
             <li class="fragment">chain agents in a tree structure</li>
-            <li class="fragment">one free end of a chain agent can latch to a hold in wall</li>
+            <li class="fragment">one free end of a chain agent can latch to a hold in wall (pivot)</li>
             <li class="fragment">controlled via joint angles, but has hierarchical control</li>
             </ul>
             <img class="fragment" width="800px" src="media/images/2x2R.png">
@@ -526,27 +524,25 @@
           <section>
             <h2>advantages</h2>
             <ul>
-            <li class="fragment">hierarchically controlled</li>
             <li class="fragment">move one chain agent its sub tree moves along with it</li>
-            <li class="fragment">inherently composable</li>
             <li class="fragment">only have to plan IK for single chain at a time, can keep computation within bounds</li>
+            <li class="fragment">inherently composable</li>
             <li class="fragment">can model more types of animals</li>
             </ul>
           </section>
           <section>
             <h2>2 arm as 2x2R tree agent</h2>
             <ul>
-              <li class="fragment">Has a arm goal and a non-holding arm</li>
+              <li class="fragment">Defns: Holding arm, Reaching arm and a neck</li>
               <li class="fragment">PRM/A* and IK planners are already in place</li>
-              <li class="fragment">For a hold to hold transition, non-holding arm goal is set (which is the next goal)</li>
-              <li class="fragment">Just need to find a good holding arm goal (a.k.a neck position)</li>
+              <li class="fragment">For a hold to hold transition, neck position is the only unknown</li>
             </ul>
           </section>
           <section>
             <h2>Finding good neck position</h2>
             <ul>
               <li class="fragment">In general this is a non-trivial task (as will be shown later)</li>
-              <li class="fragment">Just imagine where your neck goes to make your reaching hand reach the hold</li>
+              <li class="fragment">Just imagine where your neck goes to make your reaching hand wants to go next hold</li>
               <li class="fragment">Best done using function approximators like neural networks</li>
               <li class="fragment">No training data, but a loss function and a world, smells like RL</li>
             </ul>
@@ -554,42 +550,19 @@
           <section>
             <h2>NN  - Input/output</h2>
             <ul>
-              <li class="fragment">Since lower level IK take care of contiuous control, angles and angle clamps need not be an input</li>
-              <li class="fragment">Should only depend on pivot, lengths of links and current euclidean goal</li>
+              <li class="fragment">Angles and angle clamps need not be an input</li>
+              <li class="fragment">Should only depend on pivot, lengths of links and current reaching arm goal</li>
               <li class="fragment">So NN is responsible for discrete control instead of contiuous control, huge burden off of the network!!</li>
-              <li class="fragment">NN is given the smallest task possible. Reflected in training times and effectiveness</li>
+              <li class="fragment">Reflected in training times and effectiveness</li>
               <li class="fragment">Only have to do the inference once per hold to hold transition rather than every tick</li>
             </ul>
           </section>
           <section>
             <h2>NN  - Input/output</h2>
             <ul>
-              <li class="fragment">For shift and scale invariance, we input lengths and goal relative to pivot scaled w.r.t to sum of all lengths</li>
-              <li class="fragment">Input size = number of total links + 1</li>
+              <li class="fragment">Shift and scale invariance</li>
+              <li class="fragment">Input size = number of total links + 2</li>
               <li class="fragment">Output is a 2-tuple specifying unscaled neck position</li>
-            </ul>
-          </section>
-          <section>
-            <h2>NN  - Reward function</h2>
-            <p>During the episode</p>
-            <ul>
-              <li class="fragment">Distance of neck to its goal</li>
-              <li class="fragment">Distance of reaching hand to its goal</li>
-              <li class="fragment">Value of center of mass relative y coordinate</li>
-              <li class="fragment">Distance of certer of mass x from its goal</li>
-            </ul>
-            <p>After the episode</p>
-            <ul>
-              <li class="fragment">High reward for reaching close to neck goal</li>
-              <li class="fragment">High reward for reaching close to actual goal</li>
-            </ul>
-          </section>
-          <section>
-            <h2>NN  - Layers</h2>
-            <ul>
-              <li class="fragment">Since the input and output is carefully and the job of NN is kept as small as possible</li>
-              <li class="fragment">A fully connected network with 2 hidden layers with each 16 nodes do well in experiments</li>
-              <li class="fragment">ReLU activation was used</li>
             </ul>
           </section>
           <section>
@@ -634,9 +607,33 @@
             </table>
           </section>
           <section>
+            <h2>NN  - Reward function</h2>
+            <p>During the episode</p>
+            <ul>
+              <li class="fragment">Distance of neck to its goal (given by NN)</li>
+              <li class="fragment">Distance of reaching hand to its goal (given by PRM/A*)</li>
+              <li class="fragment">Value of center of mass relative y coordinate</li>
+              <li class="fragment">Distance of certer of mass x from its goal</li>
+            </ul>
+            <p>After the episode</p>
+            <ul>
+              <li class="fragment">High reward for neck reaching close to its goal (given by NN)</li>
+              <li class="fragment">High reward for reaching hand reaching close to its goal (given by PRM/A*)</li>
+            </ul>
+          </section>
+          <section>
+            <h2>NN  - Layers</h2>
+            <ul>
+              <li class="fragment">NN is kept as small as possible</li>
+              <li class="fragment">FCN with 2 x 16</li>
+              <li class="fragment">ReLU activation was used</li>
+            </ul>
+          </section>
+          <section>
             <h2>NN  - Parallelization speedup</h2>
             <ul>
-              <li class="fragment">Parallelizing CEM on 8 CPU cores yielded 36\% speedup</li>
+              <li class="fragment">Parallelizing on 8 CPU cores yielded 36% speedup</li>
+              <li class="fragment">Total training time ~10mins!</li>
             </ul>
             <img class="fragment" width="500px" src="media/images/parallelization.png"/>
           </section>

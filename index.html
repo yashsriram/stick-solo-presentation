@@ -46,6 +46,7 @@
               <li class="fragment">Climbing, Paddle sports, Surfing</li>
               <li class="fragment">Trying new things in general</li>
               <li class="fragment">Planning, Sensing, Robots, Autonomous Cars</li>
+              <li class="fragment">Current work = Climbing + Planning</li>
               </ul>
           </section>
         </section>
@@ -64,13 +65,12 @@
             <img class="fragment" width="500px" src="media/images/world.png">
           </section>
           <section>
-            <h2>chain agent</h2>
+            <h2>chain agent - little terminology</h2>
             <ul>
-            <li class="fragment">line segments connected via revolute joints</li>
+            <li class="fragment">line segments + revolute joints</li>
             <li class="fragment">can be chained</li>
-            <li class="fragment">one free end can latch to a hold in wall (pivot)</li>
+            <li class="fragment">one free end at hold (pivot)</li>
             <li class="fragment">controlled via joint angles</li>
-            <li class="fragment">N line segments gives N "R" joints (including latch)</li>
             </ul>
             <img class="fragment" width="800px" src="media/images/4R.png">
           </section>
@@ -91,23 +91,15 @@
         <section>
             <h2>the motivation</h2>
             <ul>
-            <li class="fragment">In games, this can be used to improve climbing character animation</li>
-            <li class="fragment">As robots, they can climb difficult and challenging terrain for reconnaissance and rescue missions</li>
-            <li class="fragment">Can generate new climbing routes and detect dangerous ones</li>
-            <li class="fragment">Super fun to watch agents/robots climb walls</li>
+            <li class="fragment">Games, improve climbing character animation</li>
+            <li class="fragment">Robots, climb difficult and challenging terrain, reconnaissance and rescue missions</li>
+            <li class="fragment">Climbing, generate new routes and detect dangerous ones</li>
+            <li class="fragment">
+                Lot of recent progress in character animation for various tasks.
+                But not explicity in climbing
+            </li>
+            <li class="fragment">But mostly, super fun to watch agents/robots climb walls</li>
             </ul>
-        </section>
-
-        <section>
-            <section>
-            <h2>related work</h2>
-            </section>
-            <section>
-              Lot of recent progress in character animation for walking, running, jumping, dribling, swimming
-            </section>
-            <section>
-              Not a lot explicity in climbing
-            </section>
         </section>
 
         <section>
@@ -116,11 +108,11 @@
 
         <section>
             <section>
-            <h2>PRM/A* + IK</h2>
+            <h2>Lazy man approach</h2>
             <ul>
             <li class="fragment">Split the task</li>
-            <li class="fragment">Plan in holds space using Probabilistic Roadmap and A*(or D*-Lite) search</li>
-            <li class="fragment">Move from hold to hold using Inverse Kinematics</li>
+            <li class="fragment">Hold to hold - Inverse Kinematics</li>
+            <li class="fragment">Hold space - PRM/A*-like search</li>
             </ul>
             </section>
             <section>
@@ -128,7 +120,7 @@
             <img class="fragment" width="200px" src="media/images/2R-ana.png" />
             <ul>
             <li class="fragment">Free end spans a concentric donut with inner and outer radii $| l_1 - l_2 |$ and $l_1 + l_2$</li>
-            <li class="fragment">Given goal point is in the span</li>
+            <li class="fragment">Given goal point $p = (x,y)$ is in the span</li>
             </ul>
             <img class="fragment" width="300px" src="media/images/2R-ana-e1.png" />
             <img class="fragment" width="250px" src="media/images/2R-ana-e2.png" />
@@ -138,8 +130,8 @@
             </section>
             <section>
             <h3>simplest case - 2R chain - IK</h3>
-            <li class="fragment">Analytical solve for goal joint angles given a goal point in the span</li>
-            <li class="fragment">Linearly interpolate from current joint angles to goal joint angles</li>
+            <li class="fragment">Analytical solve for IK</li>
+            <li class="fragment">Linearly interpolate from current state to goal state</li>
             <li class="fragment">Switch pivot once reached</li>
             </ul>
             </section>
@@ -157,7 +149,8 @@
             <section>
             <h3>simplest case - 2R chain - PRM</h3>
             <ul>
-            <li class="fragment">PRM edge lens can be clamped b/w $| l_1 - l_2 |$ and $l_1 + l_2$ to ensure reachability of free end</li>
+            <li class="fragment">To ensure PRM compatibility</li>
+            <li class="fragment">PRM edge lens can be clamped b/w $| l_1 - l_2 |$ and $l_1 + l_2$</li>
             </ul>
             </section>
             <section>
@@ -168,20 +161,20 @@
             <section>
             <h3>simplest case - 2R chain - tradeoffs</h3>
             <ul>
-              <li class="fragment">With proper PRM edge lens, PRM path existence guarantees reachability</li>
-              <li class="fragment">One IK solve per hold in the PRM generated path</li>
+              <li class="fragment">PRM path existence guarantees reachability</li>
+              <li class="fragment">One IK solve per hold to hold</li>
             </ul>
             </section>
             <section>
             <h3>nR chain - IK</h3>
             <ul>
-            <li class="fragment">Too many degrees of freedom, therefore no general analytical solution</li>
-            <li class="fragment">Employ iterative solutions</li>
+            <li class="fragment">Too many DOF, no general analytical solution</li>
+            <li class="fragment">Employ iterative gradient descent solutions</li>
             </ul>
             </section>
             <section>
             <h3>nR chain - IK - Jacobian Transpose</h3>
-            <li class="fragment">Given goal point is in the span</li>
+            <li class="fragment">Given goal point $p_{goal}$ is in the span</li>
             <img class="fragment" width="300px" src="media/images/nR-JT1.png" />
             <img class="fragment" width="250px" src="media/images/nR-JT2.png" />
             <img class="fragment" width="250px" src="media/images/nR-JT3.png" />
@@ -207,9 +200,9 @@
             <section>
             <h3>nR chain - tradeoffs</h3>
             <ul>
-              <li class="fragment">With proper PRM edge lens, PRM path existence guarantees reachability</li>
+              <li class="fragment">PRM path existence guarantees reachability</li>
               <li class="fragment">One IK gradient step per tick</li>
-              <li class="fragment">Multiple solutions exist, no control over what we are converging onto</li>
+              <li class="fragment">Multiple solutions, no control over what we are converging onto</li>
             </ul>
             </section>
             <!-- <section> -->
@@ -222,19 +215,19 @@
             <section>
             <h2>Climb cycle</h2>
             <ul>
+              <li class="fragment">Easiest hack for good motion</li>
               <li class="fragment">A cyclic state machine to animate climbing motion</li>
             </ul>
             </section>
             <section>
-              <h2>Two arm as 2 independent nR chains</h2>
+              <h2>2 arm as 2 independent chains</h2>
             <ul>
-              <li class="fragment">Two arms modeled using 2 nR chains</li>
               <li class="fragment">Independent motion but connected at neck</li>
             </ul>
             <img class="fragment" width="400px" src="media/videos/2arm.jpg"/>
             </section>
             <section>
-            <h2>Two arm - Climb cycle</h2>
+            <h2>2 arm - Climb cycle</h2>
             <ol>
               <li class="fragment"> Move a random arm to the next milestone </li>
               <li class="fragment"> Move neck below the latest moved arm </li>
@@ -243,19 +236,19 @@
             </ol>
             </section>
             <section>
-            <h2>Two arm - Climb cycle</h2>
+            <h2>2 arm - Climb cycle</h2>
             <video width="500px" controls src="media/videos/2arm.mkv"></video>
             </section>
             <section>
-            <h2>Four arm</h2>
+            <h2>4 arm</h2>
             <ul>
-              <li class="fragment">Four arms modeled using 4 nR chains</li>
+              <li class="fragment">4 arms modeled using 4 chains</li>
               <li class="fragment">Independent motion but connected at neck and tail, neck to tail line segment is always vertical</li>
             </ul>
             <img class="fragment" width="400px" src="media/videos/4arm.jpg"/>
             </section>
             <section>
-            <h2>Four arm - Climb cycle</h2>
+            <h2>4 arm - Climb cycle</h2>
             <ol>
               <li class="fragment">Move a random arm to the next milestone</li>
               <li class="fragment">Move neck and tail below the latest moved arm simultaneously</li>
@@ -267,7 +260,7 @@
             </ol>
             </section>
             <section>
-            <h2>Four arm - Climb cycle</h2>
+            <h2>4 arm - Climb cycle</h2>
             <video width="500px" controls src="media/videos/4arm.mp4"></video>
             </section>
             <!-- <section> -->
@@ -284,39 +277,38 @@
             <section>
             <h2>Planning hierarchy - Until now</h2>
             <ol>
-              <li class="fragment">Hold space planning using PRM/A*</li>
-              <li class="fragment">Orchestrating arms using climb cycle</li>
-              <li class="fragment">Hold to hold using analytical/iterative IK</li>
+              <li class="fragment">Hold space - PRM/A*</li>
+              <li class="fragment">Orchestrating arms - climb cycle</li>
+              <li class="fragment">Hold to hold - (analytical/gradient descent) IK</li>
             </ol>
             </section>
             <section>
             <h2>Computational bottlenecks - Until now</h2>
             <ul>
-              <li class="fragment">IK gradient descent step - matrix multiplications or inverses</li>
+              <li class="fragment">IK gradient descent step per tick - matrix multiplications or inverses</li>
             </ul>
             </section>
             <section>
             <h2>Pros - Until now</h2>
             <ol>
-              <li class="fragment">Reasonable reachability guarantees for chain agents</li>
-              <li class="fragment">Reachability guarantees are only as good as the climb cycle</li>
+              <li class="fragment">Reachability guarantees for chains - Done</li>
+              <li class="fragment">Reachability guarantees for connected chains - depend on climb cycle</li>
               <li class="fragment">Pretty good motion</li>
             </ol>
             </section>
             <section>
             <h2>Cons - Until now</h2>
             <ul>
-              <li class="fragment">No control over descent i.e. pose attained</li>
-              <li class="fragment"><img width="300px" src="media/images/badpose.png"/></li>
+              <li class="fragment">No control over poses attained<br/><img width="300px" src="media/images/badpose.png"/></li>
               <li class="fragment">No multi limb coordination</li>
-              <li class="fragment">No considerations of gravity</li>
+              <li class="fragment">No explicit considerations of gravity</li>
               <li class="fragment">No variance in generated motion during IK phase</li>
             </ul>
             </section>
             <section>
             <h2>Fixes</h2>
             <ul>
-              <li class="fragment">Model two arms as a single chain instead of 2 independent chains</li>
+              <li class="fragment">Model 2 arms with single chain instead of 2 independent chains</li>
               <li class="fragment">Add center of mass terms into gradient descent</li>
               <li class="fragment">Clamp joint angles. Previously $(-\infty, \infty)$, now something like $[-30^\circ, 60^\circ]$</li>
             </ul>
@@ -338,8 +330,7 @@
           <section>
           <h2>Gravity</h2>
           <ul>
-            <li class="fragment">Adding gravity term to the loss function for gradient descent</li>
-            <li class="fragment"><img width="500px" src="media/images/gra1.png"/></li>
+            <li class="fragment"><img width="500px" src="media/images/gra1.png"/> 2nd and 3rd term</li>
             <li class="fragment"><img width="400px" src="media/images/gra2.png"/> <img width="400px" src="media/images/gra3.png"/></li>
             <li class="fragment"><img width="200px" src="media/images/gra4.png"/></li>
             <li class="fragment">Everything is expressed in terms of joint angles</li>
@@ -348,8 +339,8 @@
           <section>
           <h2>Gravity - impl detail</h2>
           <ul>
-            <li class="fragment">As is the time complexity of calculating these terms is $O(N^3)$</li>
-            <li class="fragment">But using substructres (dynamic programming) we can bring it down to $O(N^2)$</li>
+            <li class="fragment">As is the time complexity - is $O(N^3)$</li>
+            <li class="fragment">But using substructres (dynamic programming) - down to $O(N^2)$</li>
           </ul>
           </section>
           <section>
@@ -378,9 +369,9 @@
           <section>
           <h2>No prior random sample solve</h2>
           <ul>
-            <li class="fragment">Given a goal free end position, sample many joint angle tuples within clamps</li>
-            <li class="fragment">Compute the loss function for each tuple</li>
-            <li class="fragment">Keep track of tuple that gives closest to goal</li>
+            <li class="fragment">Given a goal, sample many controls within clamps</li>
+            <li class="fragment">Compute the loss function for each control</li>
+            <li class="fragment">Keep track of control that gives best and use it</li>
             <li class="fragment">Can be made arbitrarily close to global optimum</li>
             <li class="fragment">Parallelizable</li>
           </ul>
@@ -394,8 +385,8 @@
           <h2>Current state random sample solve</h2>
           <ul>
             <li class="fragment">Similar to no prior random sample solve</li>
-            <li class="fragment">Instead of uniformly sampling the tuple in the clamps space, start from current joint angle space</li>
-            <li class="fragment">Sample around the current state, keep track of best tuple, and repeat from there</li>
+            <li class="fragment">Instead of uniformly sampling everywhere, sample in vicinity of current state</li>
+            <li class="fragment">Keep track of best, and repeat from there</li>
             <li class="fragment">More prone to local minima than former, but faster</li>
             <li class="fragment">Can be made arbitrarily close to global optimum</li>
             <li class="fragment">Parallelizable</li>
@@ -404,7 +395,8 @@
           <section>
           <h2>Integration with gradient descent</h2>
           <ul>
-            <li class="fragment">Since monte carlo methods bring approximately close to goal, use gradient descent from there to snap to goal</li>
+            <li class="fragment">Since monte carlo methods bring approximately close to goal</li>
+            <li class="fragment">Use gradient descent from there to snap to goal</li>
             <li class="fragment">In practice</li>
           </ul>
           <img class="fragment" width="800px" src="media/images/snapping.png"/>
@@ -421,7 +413,7 @@
           <section>
           <h2>Perks</h2>
           <ul>
-            <li class="fragment">Due to nature of monte carlo solves the generated motion has variance even during IK phase</li>
+            <li class="fragment">Monte carlo solves $\rightarrow$ the generated motion has variance even during IK phase</li>
           </ul>
           <img class="fragment" width="800px" src="media/images/6.4.out.gif"/>
           </section>
@@ -446,23 +438,23 @@
             <section>
             <h2>Planning hierarchy - Until now</h2>
             <ol>
-              <li class="fragment">Hold space planning using PRM/A*</li>
-              <li class="fragment">Hold to hold using monte carlo solves + gradient descent snapping</li>
+              <li class="fragment">Hold space planning - PRM/A*</li>
+              <li class="fragment">Hold to hold - MC solves + GD snapping</li>
             </ol>
             </section>
             <section>
             <h2>Computational bottlenecks - Until now</h2>
             <ul>
               <li class="fragment">Monte carlo sampling</li>
-              <li class="fragment">IK gradient descent step - matrix multiplications or inverses</li>
+              <li class="fragment">IK gradient descent step per tick - matrix multiplications or inverses</li>
             </ul>
             </section>
             <section>
             <h2>Pros - Until now</h2>
             <ol>
-              <li class="fragment">Reasonable reachability guarantees</li>
+              <li class="fragment">Reachability guarantees</li>
               <li class="fragment">Multi limb coordination</li>
-              <li class="fragment">Prevent unwanted poses</li>
+              <li class="fragment">Unwanted pose prevention</li>
               <li class="fragment">Gravity effects</li>
               <li class="fragment">Pretty good motion</li>
               <li class="fragment">Varied motion generation even in IK phase</li>
@@ -471,16 +463,11 @@
             <section>
             <h2>Cons - Until now</h2>
             <ol>
-              <li class="fragment">2 arms as 4R is good but solve is not generalizable for 4 arm agent</li>
-              <li class="fragment">Monte carlo method becomes quickly untracable as chain size increases</li>
+              <li class="fragment">4R is good for modeling 2 arm</li>
+              <li class="fragment">But is not generalizable for modeling 4 arm</li>
+              <li class="fragment">MC becomes quickly untracable as chain size increases</li>
             </ol>
             <ul>
-            </ul>
-            </section>
-            <section>
-            <h2>Fixes</h2>
-            <ul>
-              <li class="fragment">Compose chain agents and add a level of control to the hierarchy stack</li>
             </ul>
             </section>
         </section>
@@ -490,15 +477,16 @@
             <h2>tree agent</h2>
             <ul>
             <li class="fragment">chain agents in a tree structure</li>
-            <li class="fragment">one free end of a chain agent can latch to a hold in wall (pivot)</li>
-            <li class="fragment">controlled via joint angles, but has hierarchical control</li>
+            <li class="fragment">one free end of a chain agent at a hold (pivot)</li>
+            <li class="fragment">controlled via joint angles</li>
+            <li class="fragment">but has hierarchical control</li>
             </ul>
             <img class="fragment" width="800px" src="media/images/2x2R.png">
           </section>
-          <section>
-            3 x 2R can be in two configurations, note the coincident controls and multiple free ends
-            <img src="media/images/3x2R.png">
-          </section>
+          <!-- <section> -->
+          <!--   3 x 2R can be in two configurations, note the coincident controls and multiple free ends -->
+          <!--   <img src="media/images/3x2R.png"> -->
+          <!-- </section> -->
           <section>
           <table>
             <tbody>
@@ -524,14 +512,15 @@
           <section>
             <h2>advantages</h2>
             <ul>
-            <li class="fragment">move one chain agent its sub tree moves along with it</li>
-            <li class="fragment">only have to plan IK for single chain at a time, can keep computation within bounds</li>
+            <li class="fragment">move one chain agent its sub tree moves along with it (very low computations)</li>
+            <li class="fragment">only have to plan IK for single chain at a time</li>
             <li class="fragment">inherently composable</li>
             <li class="fragment">can model more types of animals</li>
             </ul>
           </section>
           <section>
             <h2>2 arm as 2x2R tree agent</h2>
+                <img class="fragment" width="400px" src="media/videos/2x2R.jpg">
             <ul>
               <li class="fragment">Defns: Holding arm, Reaching arm and a neck</li>
               <li class="fragment">PRM/A* and IK planners are already in place</li>
@@ -554,7 +543,7 @@
               <li class="fragment">Should only depend on pivot, lengths of links and current reaching arm goal</li>
               <li class="fragment">So NN is responsible for discrete control instead of contiuous control, huge burden off of the network!!</li>
               <li class="fragment">Reflected in training times and effectiveness</li>
-              <li class="fragment">Only have to do the inference once per hold to hold transition rather than every tick</li>
+              <li class="fragment">Inference only once per hold to hold transition rather than every tick</li>
             </ul>
           </section>
           <section>
@@ -609,33 +598,33 @@
           <section>
             <h2>NN  - Reward function</h2>
             <p>During the episode</p>
-            <ul>
-              <li class="fragment">Distance of neck to its goal (given by NN)</li>
-              <li class="fragment">Distance of reaching hand to its goal (given by PRM/A*)</li>
-              <li class="fragment">Value of center of mass relative y coordinate</li>
-              <li class="fragment">Distance of certer of mass x from its goal</li>
-            </ul>
+            <ol class="fragment">
+              <li >Distance of neck to its goal (given by NN)</li>
+              <li >Distance of reaching hand to its goal (given by PRM/A*)</li>
+              <li >Value of center of mass relative y coordinate</li>
+              <li >Distance of certer of mass x from its goal</li>
+            </ol>
             <p>After the episode</p>
-            <ul>
-              <li class="fragment">High reward for neck reaching close to its goal (given by NN)</li>
-              <li class="fragment">High reward for reaching hand reaching close to its goal (given by PRM/A*)</li>
-            </ul>
+            <ol class="fragment">
+              <li >Neck ending up close to its goal (given by NN)</li>
+              <li >Reaching hand ending up close to its goal (given by PRM/A*)</li>
+            </ol>
           </section>
           <section>
             <h2>NN  - Layers</h2>
             <ul>
-              <li class="fragment">NN is kept as small as possible</li>
-              <li class="fragment">FCN with 2 x 16</li>
-              <li class="fragment">ReLU activation was used</li>
+              <li >NN is kept as small as possible</li>
+              <li >FCN with 2 x 16</li>
+              <li >ReLU activation was used</li>
             </ul>
           </section>
           <section>
             <h2>NN  - Parallelization speedup</h2>
             <ul>
-              <li class="fragment">Parallelizing on 8 CPU cores yielded 36% speedup</li>
-              <li class="fragment">Total training time ~10mins!</li>
+              <li >Parallelizing on 8 CPU cores yielded 36% speedup</li>
+              <li >Total training time ~10mins!</li>
             </ul>
-            <img class="fragment" width="500px" src="media/images/parallelization.png"/>
+            <img width="500px" src="media/images/parallelization.png"/>
           </section>
           <section>
             <h2>NN  - Viz</h2>
@@ -646,10 +635,10 @@
             <img width="600px" src="media/images/11.1.gif"/>
           </section>
           <section>
-            <h2>NN  - Left and right networks</h2>
+            <h2>NN  - Dextrous difference</h2>
             <ul>
-              <li class="fragment">Since it is so cheap to train networks we train one for each case</li>
-              <li class="fragment">This can be used to model different dexterous behavior</li>
+              <li >So cheap to train networks, we train one for each holding arm</li>
+              <li >This can be used to model different dexterous behavior</li>
             </ul>
             <img width="400px" src="media/images/11.2.gif"/>
             <img width="400px" src="media/images/11.1.gif"/>
@@ -675,7 +664,8 @@
           <section>
           <h2>Testing</h2>
           <ul>
-            <li class="fragment">A climbing route with left, right, diagonal, up and down movements is chosen to compare various methods</li>
+            <li class="fragment">Modeling 2 arm</li>
+            <li class="fragment">A good climbing route with many types of movements as testcase</li>
           </ul>
           </section>
           <section>
@@ -697,9 +687,9 @@
             <section>
             <h2>Planning hierarchy - Until now</h2>
             <ol>
-              <li class="fragment">Hold space planning using PRM/A*</li>
-              <li class="fragment">Neck goal using Cross entropy optimized neural network</li>
-              <li class="fragment">IK using monte carlo solves + gradient descent snapping</li>
+              <li class="fragment">Hold space - PRM/A*</li>
+              <li class="fragment">Neck goal - NN/CEM</li>
+              <li class="fragment">IK - MC solves + GD snapping</li>
             </ol>
             </section>
             <section>
@@ -707,15 +697,15 @@
             <ul>
               <li class="fragment">Monte carlo sampling</li>
               <li class="fragment">IK gradient descent step - matrix multiplications or inverses</li>
-              <li class="fragment">Neural network training but it can be done before climbing</li>
+              <li class="fragment">Neural network training, but it can be done before climbing</li>
             </ul>
             </section>
             <section>
             <h2>Pros - Until now</h2>
             <ol>
-              <li class="fragment">Reasonable reachability guarantees</li>
+              <li class="fragment">Reachability guarantees</li>
               <li class="fragment">Multi limb coordination</li>
-              <li class="fragment">Prevent unwanted poses</li>
+              <li class="fragment">Unwanted poses prevention</li>
               <li class="fragment">Gravity effects</li>
               <li class="fragment">Pretty good motion</li>
               <li class="fragment">Varied motion generation even in IK phase</li>
@@ -725,9 +715,8 @@
             <section>
             <h2>Cons - Until now</h2>
             <ol>
-              <li class="fragment">Does not handle the cases where the agent pivots using two ends</li>
-              <li class="fragment">Since no datasets are used all heuristics are based on our judgment and may fail for any practical use</li>
-              <li class="fragment">Snapping using gradient descent is flimsy due to vanishing gradients problem</li>
+                <li class="fragment">Two simultaneous pivots not handled</li>
+              <li class="fragment">Snapping using GD is flimsy due to vanishing gradients problem</li>
             </ol>
             </section>
             <section>

@@ -201,7 +201,7 @@
             <h3>nR chain - tradeoffs</h3>
             <ul>
               <li class="fragment">PRM path existence guarantees reachability</li>
-              <li class="fragment">One IK gradient step per tick</li>
+              <li class="fragment">One IK GD per tick instead of hold to hold</li>
               <li class="fragment">Multiple solutions, no control over what we are converging onto</li>
             </ul>
             </section>
@@ -277,40 +277,40 @@
             <section>
             <h2>Planning hierarchy - Until now</h2>
             <ol>
-              <li class="fragment">Hold space - PRM/A*</li>
-              <li class="fragment">Orchestrating arms - climb cycle</li>
-              <li class="fragment">Hold to hold - (analytical/gradient descent) IK</li>
+              <li >Hold space - PRM/A*</li>
+              <li >Orchestrating arms - climb cycle</li>
+              <li >Hold to hold - (analytical/gradient descent) IK</li>
             </ol>
             </section>
             <section>
             <h2>Computational bottlenecks - Until now</h2>
             <ul>
-              <li class="fragment">IK gradient descent step per tick - matrix multiplications or inverses</li>
+              <li >IK GD step per tick - matrix multiplications or inverses</li>
             </ul>
             </section>
             <section>
             <h2>Pros - Until now</h2>
             <ol>
-              <li class="fragment">Reachability guarantees for chains - Done</li>
-              <li class="fragment">Reachability guarantees for connected chains - depend on climb cycle</li>
-              <li class="fragment">Pretty good motion</li>
+              <li >Reachability guarantees for chains - Done</li>
+              <li >Reachability guarantees for connected chains - depend on climb cycle</li>
+              <li >Pretty good motion</li>
             </ol>
             </section>
             <section>
             <h2>Cons - Until now</h2>
             <ul>
-              <li class="fragment">No control over poses attained<br/><img width="300px" src="media/images/badpose.png"/></li>
-              <li class="fragment">No multi limb coordination</li>
-              <li class="fragment">No explicit considerations of gravity</li>
-              <li class="fragment">No variance in generated motion during IK phase</li>
+              <li >No control over poses attained<br/><img width="300px" src="media/images/badpose.png"/></li>
+              <li >No multi limb coordination</li>
+              <li >No explicit considerations of gravity</li>
+              <li >No variance in generated motion during IK phase</li>
             </ul>
             </section>
             <section>
             <h2>Fixes</h2>
             <ul>
-              <li class="fragment">Model 2 arms with single chain instead of 2 independent chains</li>
-              <li class="fragment">Add center of mass terms into gradient descent</li>
-              <li class="fragment">Clamp joint angles. Previously $(-\infty, \infty)$, now something like $[-30^\circ, 60^\circ]$</li>
+              <li >Model 2 arms with single chain instead of 2 independent chains</li>
+              <li >Add center of mass terms into gradient descent</li>
+              <li >Clamp joint angles. Previously $(-\infty, \infty)$, now something like $[-30^\circ, 60^\circ]$</li>
             </ul>
             </section>
         </section>
@@ -438,34 +438,34 @@
             <section>
             <h2>Planning hierarchy - Until now</h2>
             <ol>
-              <li class="fragment">Hold space planning - PRM/A*</li>
-              <li class="fragment">Hold to hold - MC solves + GD snapping</li>
+              <li >Hold space planning - PRM/A*</li>
+              <li >Hold to hold - MC solves + GD snapping</li>
             </ol>
             </section>
             <section>
             <h2>Computational bottlenecks - Until now</h2>
             <ul>
-              <li class="fragment">Monte carlo sampling</li>
-              <li class="fragment">IK gradient descent step per tick - matrix multiplications or inverses</li>
+              <li >Monte carlo sampling</li>
+              <li >IK gradient descent step per tick - matrix multiplications or inverses</li>
             </ul>
             </section>
             <section>
             <h2>Pros - Until now</h2>
             <ol>
-              <li class="fragment">Reachability guarantees</li>
-              <li class="fragment">Multi limb coordination</li>
-              <li class="fragment">Unwanted pose prevention</li>
-              <li class="fragment">Gravity effects</li>
-              <li class="fragment">Pretty good motion</li>
-              <li class="fragment">Varied motion generation even in IK phase</li>
+              <li >Reachability guarantees</li>
+              <li >Multi limb coordination</li>
+              <li >Unwanted pose prevention</li>
+              <li >Gravity effects</li>
+              <li >Pretty good motion</li>
+              <li >Varied motion generation even in IK phase</li>
             </ol>
             </section>
             <section>
             <h2>Cons - Until now</h2>
             <ol>
-              <li class="fragment">4R is good for modeling 2 arm</li>
-              <li class="fragment">But is not generalizable for modeling 4 arm</li>
-              <li class="fragment">MC becomes quickly untracable as chain size increases</li>
+              <li >4R is good for modeling 2 arm</li>
+              <li >But is not generalizable for modeling 4 arm</li>
+              <li >MC becomes quickly untracable as chain size increases</li>
             </ol>
             <ul>
             </ul>
@@ -687,45 +687,48 @@
             <section>
             <h2>Planning hierarchy - Until now</h2>
             <ol>
-              <li class="fragment">Hold space - PRM/A*</li>
-              <li class="fragment">Neck goal - NN/CEM</li>
-              <li class="fragment">IK - MC solves + GD snapping</li>
+              <li >Hold space - PRM/A*</li>
+              <li >Neck goal - NN/CEM</li>
+              <li >IK - MC solves + GD snapping</li>
             </ol>
             </section>
             <section>
             <h2>Computational bottlenecks - Until now</h2>
             <ul>
-              <li class="fragment">Monte carlo sampling</li>
-              <li class="fragment">IK gradient descent step - matrix multiplications or inverses</li>
-              <li class="fragment">Neural network training, but it can be done before climbing</li>
+              <li >Monte carlo sampling</li>
+              <li >IK gradient descent step - matrix multiplications or inverses</li>
+              <li >Neural network training, but it can be done before climbing</li>
             </ul>
             </section>
             <section>
             <h2>Pros - Until now</h2>
             <ol>
-              <li class="fragment">Reachability guarantees</li>
-              <li class="fragment">Multi limb coordination</li>
-              <li class="fragment">Unwanted poses prevention</li>
-              <li class="fragment">Gravity effects</li>
-              <li class="fragment">Pretty good motion</li>
-              <li class="fragment">Varied motion generation even in IK phase</li>
-              <li class="fragment">Can be extended to larger tree structure with reasonable effort</li>
+              <li >Reachability guarantees</li>
+              <li >Multi limb coordination</li>
+              <li >Unwanted poses prevention</li>
+              <li >Gravity effects</li>
+              <li >Pretty good motion</li>
+              <li >Varied motion generation even in IK phase</li>
+              <li >Can be extended to larger tree structure with reasonable effort</li>
             </ol>
             </section>
             <section>
             <h2>Cons - Until now</h2>
             <ol>
-                <li class="fragment">Two simultaneous pivots not handled</li>
-              <li class="fragment">Snapping using GD is flimsy due to vanishing gradients problem</li>
+            <li >Two simultaneous pivots not handled</li>
+            <li >Snapping using GD is flimsy due to vanishing gradients problem</li>
             </ol>
             </section>
             <section>
             <h2>Future work</h2>
             <ol>
-              <li class="fragment">Extrapolate to larger tree structures</li>
-              <li class="fragment">Handle simultaneous pivot dynamics</li>
-              <li class="fragment">Multiple tree agent coordination?</li>
+              <li >Extrapolate to larger tree structures</li>
+              <li >Handle simultaneous pivot dynamics</li>
+              <li >Multiple tree agent coordination?</li>
             </ol>
+            </section>
+            <section>
+            <h1>Thank you!</h1>
             </section>
         </section>
       </div>

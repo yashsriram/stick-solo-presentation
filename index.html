@@ -59,41 +59,41 @@
             Other chains
             <img src="media/images/chains.png">
           </section>
-          <section>
-            <h2>tree agent</h2>
-            <ul>
-            <li class="fragment">chain agents in a tree structure</li>
-            <li class="fragment">one free end of a chain agent can latch to a hold in wall</li>
-            <li class="fragment">controlled via joint angles, but has hierarchical control</li>
-            </ul>
-            <img class="fragment" width="800px" src="media/images/2x2R.png">
-          </section>
-          <section>
-            3 x 2R can be in two configurations, note the coincident controls and multiple free ends
-            <img src="media/images/3x2R.png">
-          </section>
-          <section>
-          <table>
-            <tbody>
-              <tr>
-                <th style="padding: 0">4R (chain)</th>
-                <th style="padding: 0">2 x 2R (tree)</th>
-              </tr>
-              <tr class="fragment">
-                <th style="padding: 0"><img width="400px" src="media/images/4R.png"/></th>
-                <th style="padding: 0"><img width="400px" src="media/images/2x2R.png"/></th>
-              </tr>
-              <tr class="fragment">
-                <td ><span style="font-size: 0.4em">both translation and rotation is transferred down the chain</span></td>
-                <td ><span style="font-size: 0.4em">hierarchical control, only translation is transferred down the tree</span></td>
-              </tr>
-              <tr class="fragment">
-                <th style="padding: 0"><img width="300px" src="media/images/4R-rot.png"/></th>
-                <th style="padding: 0"><img width="300px" src="media/images/2x2R-rot.png"/></th>
-              </tr>
-            </tbody>
-          </table>
-          </section>
+          <!-- <section> -->
+          <!--   <h2>tree agent</h2> -->
+          <!--   <ul> -->
+          <!--   <li class="fragment">chain agents in a tree structure</li> -->
+          <!--   <li class="fragment">one free end of a chain agent can latch to a hold in wall</li> -->
+          <!--   <li class="fragment">controlled via joint angles, but has hierarchical control</li> -->
+          <!--   </ul> -->
+          <!--   <img class="fragment" width="800px" src="media/images/2x2R.png"> -->
+          <!-- </section> -->
+          <!-- <section> -->
+          <!--   3 x 2R can be in two configurations, note the coincident controls and multiple free ends -->
+          <!--   <img src="media/images/3x2R.png"> -->
+          <!-- </section> -->
+          <!-- <section> -->
+          <!-- <table> -->
+          <!--   <tbody> -->
+          <!--     <tr> -->
+          <!--       <th style="padding: 0">4R (chain)</th> -->
+          <!--       <th style="padding: 0">2 x 2R (tree)</th> -->
+          <!--     </tr> -->
+          <!--     <tr class="fragment"> -->
+          <!--       <th style="padding: 0"><img width="400px" src="media/images/4R.png"/></th> -->
+          <!--       <th style="padding: 0"><img width="400px" src="media/images/2x2R.png"/></th> -->
+          <!--     </tr> -->
+          <!--     <tr class="fragment"> -->
+          <!--       <td ><span style="font-size: 0.4em">both translation and rotation is transferred down the chain</span></td> -->
+          <!--       <td ><span style="font-size: 0.4em">hierarchical control, only translation is transferred down the tree</span></td> -->
+          <!--     </tr> -->
+          <!--     <tr class="fragment"> -->
+          <!--       <th style="padding: 0"><img width="300px" src="media/images/4R-rot.png"/></th> -->
+          <!--       <th style="padding: 0"><img width="300px" src="media/images/2x2R-rot.png"/></th> -->
+          <!--     </tr> -->
+          <!--   </tbody> -->
+          <!-- </table> -->
+          <!-- </section> -->
           <section>
             <h2>the task</h2>
             <ul>
@@ -229,6 +229,93 @@
         <section>
             <section>
             <h2>Climb cycle</h2>
+            <ul>
+              <li class="fragment">A cyclic state machine to animate climbing motion</li>
+            </ul>
+            </section>
+            <section>
+            <h2>Two arm</h2>
+            <ul>
+              <li class="fragment">Two arms modeled using 2 nR chains</li>
+              <li class="fragment">Independent motion but connected at neck</li>
+            </ul>
+            <img class="fragment" width="400px" src="media/videos/2arm.jpg"/>
+            </section>
+            <section>
+            <h2>Two arm - Climb cycle</h2>
+            <ol>
+              <li class="fragment"> Move a random arm to the next milestone </li>
+              <li class="fragment"> Move neck below the latest moved arm </li>
+              <li class="fragment"> Move the other arm </li>
+              <li class="fragment"> Go to step 1 </li>
+            </ol>
+            </section>
+            <section>
+            <h2>Two arm - Climb cycle</h2>
+            <video width="500px" controls src="media/videos/2arm.mkv"></video>
+            </section>
+            <section>
+            <h2>Four arm</h2>
+            <ul>
+              <li class="fragment">Four arms modeled using 4 nR chains</li>
+              <li class="fragment">Independent motion but connected at neck and tail, neck to tail line segment is always vertical</li>
+            </ul>
+            <img class="fragment" width="400px" src="media/videos/4arm.jpg"/>
+            </section>
+            <section>
+            <h2>Four arm - Climb cycle</h2>
+            <ol>
+              <li class="fragment">Move a random arm to the next milestone</li>
+              <li class="fragment">Move neck and tail below the latest moved arm simultaneously</li>
+              <li class="fragment">Move the opposite leg to a certain tuned displacement from tail</li>
+              <li class="fragment">Move the other arm next milestone</li>
+              <li class="fragment">Move neck and tail below the latest moved arm simultaneously</li>
+              <li class="fragment">Move the opposite leg to a certain tuned displacement from tail</li>
+              <li class="fragment">Go to step 1</li>
+            </ol>
+            </section>
+            <section>
+            <h2>Four arm - Climb cycle</h2>
+            <video width="500px" controls src="media/videos/4arm.mp4"></video>
+            </section>
+            <section>
+            <h2>Four arm - Race</h2>
+            <video width="500px" controls src="media/videos/race.mkv"></video>
+            </section>
+            <section>
+            <h2>With bells and whistles</h2>
+            <video width="500px" controls src="media/videos/wild.mp4"></video>
+            </section>
+            <section>
+            <h2>Planning hierarchy - Until now</h2>
+            <ol>
+              <li class="fragment">Hold space planning using PRM/A*</li>
+              <li class="fragment">Orchestrating arms using climb cycle</li>
+              <li class="fragment">Hold to hold using analytical/iterative IK</li>
+            </ol>
+            </section>
+            <section>
+            <h2>Pros - Until now</h2>
+            <ol>
+              <li class="fragment">Reasonable reachability guarantees for chain agents</li>
+              <li class="fragment">Reachability guarantees are only as good as the climb cycle</li>
+              <li class="fragment">Pretty good motion</li>
+            </ol>
+            </section>
+            <section>
+            <h2>Cons - Until now</h2>
+            <ul>
+              <li class="fragment">No control over descent i.e. pose attained</li>
+              <li class="fragment"><img width="400px" src="media/images/badpose.png"/></li>
+              <li class="fragment">No multi limb coordination</li>
+              <li class="fragment">No considerations of gravity</li>
+            </ul>
+            </section>
+            <section>
+            <h2>Computational bottlenecks - Until now</h2>
+            <ul>
+              <li class="fragment">IK gradient descent step - matrix multiplications or inverses</li>
+            </ul>
             </section>
         </section>
 

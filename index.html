@@ -26,6 +26,7 @@
           </h2>
           <p>
             <small>Created by <a href="https://github.com/buggedbit/">Yashasvi Sriram Patkuri</a></small>
+            <small>Avaliable at <a href="https://yashorts.github.io/stick-solo-presentation/">https://yashorts.github.io/stick-solo-presentation/</a></small>
           </p>
         </section>
 
@@ -59,41 +60,6 @@
             Other chains
             <img src="media/images/chains.png">
           </section>
-          <!-- <section> -->
-          <!--   <h2>tree agent</h2> -->
-          <!--   <ul> -->
-          <!--   <li class="fragment">chain agents in a tree structure</li> -->
-          <!--   <li class="fragment">one free end of a chain agent can latch to a hold in wall</li> -->
-          <!--   <li class="fragment">controlled via joint angles, but has hierarchical control</li> -->
-          <!--   </ul> -->
-          <!--   <img class="fragment" width="800px" src="media/images/2x2R.png"> -->
-          <!-- </section> -->
-          <!-- <section> -->
-          <!--   3 x 2R can be in two configurations, note the coincident controls and multiple free ends -->
-          <!--   <img src="media/images/3x2R.png"> -->
-          <!-- </section> -->
-          <!-- <section> -->
-          <!-- <table> -->
-          <!--   <tbody> -->
-          <!--     <tr> -->
-          <!--       <th style="padding: 0">4R (chain)</th> -->
-          <!--       <th style="padding: 0">2 x 2R (tree)</th> -->
-          <!--     </tr> -->
-          <!--     <tr class="fragment"> -->
-          <!--       <th style="padding: 0"><img width="400px" src="media/images/4R.png"/></th> -->
-          <!--       <th style="padding: 0"><img width="400px" src="media/images/2x2R.png"/></th> -->
-          <!--     </tr> -->
-          <!--     <tr class="fragment"> -->
-          <!--       <td ><span style="font-size: 0.4em">both translation and rotation is transferred down the chain</span></td> -->
-          <!--       <td ><span style="font-size: 0.4em">hierarchical control, only translation is transferred down the tree</span></td> -->
-          <!--     </tr> -->
-          <!--     <tr class="fragment"> -->
-          <!--       <th style="padding: 0"><img width="300px" src="media/images/4R-rot.png"/></th> -->
-          <!--       <th style="padding: 0"><img width="300px" src="media/images/2x2R-rot.png"/></th> -->
-          <!--     </tr> -->
-          <!--   </tbody> -->
-          <!-- </table> -->
-          <!-- </section> -->
           <section>
             <h2>the task</h2>
             <ul>
@@ -458,6 +424,88 @@
             <li class="fragment">If agent is reaching with left hand but goal on on right of pivot (or) If agent is reaching with right hand but goal on on left of pivot</li>
           </ul>
           <img class="fragment" width="600px" src="media/images/7.3.matching.gif"/>
+          </section>
+        </section>
+
+        <section>
+            <section>
+            <h2>Planning hierarchy - Until now</h2>
+            <ol>
+              <li class="fragment">Hold space planning using PRM/A*</li>
+              <li class="fragment">Hold to hold using monte carlo solves + gradient descent snapping</li>
+            </ol>
+            </section>
+            <section>
+            <h2>Computational bottlenecks - Until now</h2>
+            <ul>
+              <li class="fragment">Monte carlo sampling</li>
+              <li class="fragment">IK gradient descent step - matrix multiplications or inverses</li>
+            </ul>
+            </section>
+            <section>
+            <h2>Pros - Until now</h2>
+            <ol>
+              <li class="fragment">Reasonable reachability guarantees</li>
+              <li class="fragment">Multi limb coordination</li>
+              <li class="fragment">Prevent unwanted poses</li>
+              <li class="fragment">Gravity effects</li>
+              <li class="fragment">Pretty good motion</li>
+              <li class="fragment">Varied motion generation even in IK phase</li>
+            </ol>
+            </section>
+            <section>
+            <h2>Cons - Until now</h2>
+            <ol>
+              <li class="fragment">4R is good but not generalizable</li>
+              <li class="fragment">Should not have to write code specific to agent topology</li>
+              <li class="fragment">Monte carlo method becomes quickly untracable as number of links increases</li>
+            </ol>
+            <ul>
+            </ul>
+            </section>
+            <section>
+            <h2>Fixes</h2>
+            <ul>
+              <li class="fragment">Compose chain agents and add a level of control to the hierarchy stack</li>
+            </ul>
+            </section>
+        </section>
+
+        <section>
+          <section>
+            <h2>tree agent</h2>
+            <ul>
+            <li class="fragment">chain agents in a tree structure</li>
+            <li class="fragment">one free end of a chain agent can latch to a hold in wall</li>
+            <li class="fragment">controlled via joint angles, but has hierarchical control</li>
+            </ul>
+            <img class="fragment" width="800px" src="media/images/2x2R.png">
+          </section>
+          <section>
+            3 x 2R can be in two configurations, note the coincident controls and multiple free ends
+            <img src="media/images/3x2R.png">
+          </section>
+          <section>
+          <table>
+            <tbody>
+              <tr>
+                <th style="padding: 0">4R (chain)</th>
+                <th style="padding: 0">2 x 2R (tree)</th>
+              </tr>
+              <tr class="fragment">
+                <th style="padding: 0"><img width="400px" src="media/images/4R.png"/></th>
+                <th style="padding: 0"><img width="400px" src="media/images/2x2R.png"/></th>
+              </tr>
+              <tr class="fragment">
+                <td ><span style="font-size: 0.4em">both translation and rotation is transferred down the chain</span></td>
+                <td ><span style="font-size: 0.4em">hierarchical control, only translation is transferred down the tree</span></td>
+              </tr>
+              <tr class="fragment">
+                <th style="padding: 0"><img width="300px" src="media/images/4R-rot.png"/></th>
+                <th style="padding: 0"><img width="300px" src="media/images/2x2R-rot.png"/></th>
+              </tr>
+            </tbody>
+          </table>
           </section>
         </section>
 

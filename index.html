@@ -32,7 +32,7 @@
 
         <section>
           <section>
-            TODO: motion planning, particle systems, physics, sixth sense, escape room, drive, climbing clips
+              <h2>Me</h2>
               <ul>
               <li class="fragment">Yashasvi Sriram</li>
               <li class="fragment">@buggedbit</li>
@@ -44,42 +44,10 @@
               <h2>Interests</h2>
               <ul>
               <li class="fragment">Bringing math to life</li>
-              <li class="fragment">Adventures</li>
               <li class="fragment">Climbing, Paddle sports, Surfing</li>
               <li class="fragment">Trying new things in general</li>
+              <li class="fragment">Planning, Sensing, Physical simulations</li>
               </ul>
-          </section>
-          <section>
-              <h2>PRM/A*</h2>
-              <img width="200px" src="media/motion-planning/graph_search/dfs.png">
-              <img width="200px" src="media/motion-planning/graph_search/bfs.png">
-              <img width="200px" src="media/motion-planning/graph_search/ucs.png">
-              <img width="200px" src="media/motion-planning/graph_search/a_star.png">
-              <img width="200px" src="media/motion-planning/graph_search/weighted_astar.png">
-              <img width="400px" src="media/motion-planning/graph_search/time_comparision.png">
-          </section>
-          <section>
-              <h2>RRT</h2>
-              <img width="200px" src="media/motion-planning/rrt/1.png">
-              <img width="200px" src="media/motion-planning/rrt/2.png">
-              <img width="200px" src="media/motion-planning/rrt/3.png">
-              <img width="200px" src="media/motion-planning/rrt/4.png">
-              <h2>RRT*</h2>
-              <img width="200px" src="media/motion-planning/rrtstar/1.png">
-              <img width="200px" src="media/motion-planning/rrtstar/2.png">
-              <img width="200px" src="media/motion-planning/rrtstar/3.png">
-              <img width="200px" src="media/motion-planning/rrtstar/4.png">
-          </section>
-          <section>
-              <h2>Line agents</h2>
-              <img width="300px" src="media/motion-planning/line/1.png">
-              <img width="300px" src="media/motion-planning/line/2.png">
-              <img width="300px" src="media/motion-planning/line/3.png">
-              <img width="300px" src="media/motion-planning/line/4.png">
-          </section>
-          <section>
-              <h2>Elastic planning</h2>
-              <img width="800px" src="media/images/9.gen-orrt-vis-sideview.gif">
           </section>
         </section>
 
@@ -136,13 +104,9 @@
             </section>
             <section>
               Lot of recent progress in character animation for walking, running, jumping, dribling, swimming
-
-              TODO: add gifs and cite
             </section>
             <section>
               Not a lot explicity in climbing
-
-              TODO: add gifs and cite
             </section>
         </section>
 
@@ -179,17 +143,17 @@
             <li class="fragment">Switch pivot once reached</li>
             </ul>
             </section>
-            <section>
-            <h2>Switching pivot - implementation detail</h2>
-            <ul>
-            <li class="fragment">When switching pivot joint angles have to be reassigned, since this is new IK problem</li>
-            </ul>
-            <ol class="fragment">
-              <li>Pivot position is the previous free end position</li>
-              <li>Order of lengths of links are reversed</li>
-              <li>From the dynamics $q_{new} = [\sum_{i=1}^{n} q_i - \pi, -q_{n-1}, ..., -q_{1}]$</li>
-            </ol>
-            </section>
+            <!-- <section> -->
+            <!-- <h2>Switching pivot - implementation detail</h2> -->
+            <!-- <ul> -->
+            <!-- <li class="fragment">When switching pivot joint angles have to be reassigned, since this is new IK problem</li> -->
+            <!-- </ul> -->
+            <!-- <ol class="fragment"> -->
+            <!--   <li>Pivot position is the previous free end position</li> -->
+            <!--   <li>Order of lengths of links are reversed</li> -->
+            <!--   <li>From the dynamics $q_{new} = [\sum_{i=1}^{n} q_i - \pi, -q_{n-1}, ..., -q_{1}]$</li> -->
+            <!-- </ol> -->
+            <!-- </section> -->
             <section>
             <h3>simplest case - 2R chain - PRM</h3>
             <ul>
@@ -248,10 +212,10 @@
               <li class="fragment">Multiple solutions exist, no control over what we are convering onto</li>
             </ul>
             </section>
-            <section>
-              <h3>nR chain - n >> 1 - can simulate worms</h3>
-            <video width="500px" controls src="media/videos/nR-worm.mp4"></video>
-            </section>
+            <!-- <section> -->
+            <!--   <h3>nR chain - n >> 1 - can simulate worms</h3> -->
+            <!-- <video width="500px" controls src="media/videos/nR-worm.mp4"></video> -->
+            <!-- </section> -->
         </section>
 
         <section>
@@ -306,14 +270,14 @@
             <h2>Four arm - Climb cycle</h2>
             <video width="500px" controls src="media/videos/4arm.mp4"></video>
             </section>
-            <section>
-            <h2>Four arm - Race</h2>
-            <video width="500px" controls src="media/videos/race.mkv"></video>
-            </section>
-            <section>
-            <h2>With bells and whistles</h2>
-            <video width="500px" controls src="media/videos/wild.mp4"></video>
-            </section>
+            <!-- <section> -->
+            <!-- <h2>Four arm - Race</h2> -->
+            <!-- <video width="500px" controls src="media/videos/race.mkv"></video> -->
+            <!-- </section> -->
+            <!-- <section> -->
+            <!-- <h2>With bells and whistles</h2> -->
+            <!-- <video width="500px" controls src="media/videos/wild.mp4"></video> -->
+            <!-- </section> -->
         </section>
 
         <section>
@@ -360,13 +324,13 @@
         </section>
 
         <section>
-          <section>
-          <h2>Switching pivot with angle constraints - GORY IMPL detail</h2>
-          <ul>
-          <li class="fragment">In addition to previous steps for switching pivot we also need to reassigned joint angle clamps</li>
-          <li class="fragment">Due to sigma term in angle reassignment, first and last angles cannot be clamped</li>
-          </ul>
-          </section>
+          <!-- <section> -->
+          <!-- <h2>Switching pivot with angle constraints - GORY IMPL detail</h2> -->
+          <!-- <ul> -->
+          <!-- <li class="fragment">In addition to previous steps for switching pivot we also need to reassigned joint angle clamps</li> -->
+          <!-- <li class="fragment">Due to sigma term in angle reassignment, first and last angles cannot be clamped</li> -->
+          <!-- </ul> -->
+          <!-- </section> -->
           <section>
           <h2>2 arm as 4R</h2>
           <img width="800px" src="media/images/3.0.intro.gif"/>

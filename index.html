@@ -163,6 +163,17 @@
             </ul>
             </section>
             <section>
+            <h2>Switching pivot - implementation detail</h2>
+            <ul>
+            <li class="fragment">When switching pivot joint angles have to be reassigned, since this is new IK problem</li>
+            </ul>
+            <ol class="fragment">
+              <li>Pivot position is the previous free end position</li>
+              <li>Order of lengths of links are reversed</li>
+              <li>From the dynamics $q_{new} = [\sum_{i=1}^{n} q_i - \pi, -q_{n-1}, ..., -q_{1}]$</li>
+            </ol>
+            </section>
+            <section>
             <h3>simplest case - 2R chain - PRM</h3>
             <ul>
             <li class="fragment">PRM edge lens can be clamped b/w $| l_1 - l_2 |$ and $l_1 + l_2$ to ensure reachability of free end</li>
@@ -286,6 +297,9 @@
             <h2>With bells and whistles</h2>
             <video width="500px" controls src="media/videos/wild.mp4"></video>
             </section>
+        </section>
+
+        <section>
             <section>
             <h2>Planning hierarchy - Until now</h2>
             <ol>
@@ -293,6 +307,12 @@
               <li class="fragment">Orchestrating arms using climb cycle</li>
               <li class="fragment">Hold to hold using analytical/iterative IK</li>
             </ol>
+            </section>
+            <section>
+            <h2>Computational bottlenecks - Until now</h2>
+            <ul>
+              <li class="fragment">IK gradient descent step - matrix multiplications or inverses</li>
+            </ul>
             </section>
             <section>
             <h2>Pros - Until now</h2>
@@ -309,26 +329,136 @@
               <li class="fragment"><img width="400px" src="media/images/badpose.png"/></li>
               <li class="fragment">No multi limb coordination</li>
               <li class="fragment">No considerations of gravity</li>
+              <li class="fragment">No variance in generated motion during IK phase</li>
             </ul>
             </section>
             <section>
-            <h2>Computational bottlenecks - Until now</h2>
+            <h2>Fixes</h2>
             <ul>
-              <li class="fragment">IK gradient descent step - matrix multiplications or inverses</li>
+              <li class="fragment">To prevent unwanted poses the joint angle domain can be restricted. Previously $(-\infty, \infty)$, now something like $[-30^\circ, 60^\circ]$</li>
+              <li class="fragment">To enable multi limb coordination instead of modelling two arms as independent nR chains, model it as single 2nR chain</li>
+              <li class="fragment">To add the effect of gravity, add center of mass terms into gradient descent</li>
             </ul>
             </section>
         </section>
 
         <section>
-            <section>
-            <h2>New Constraints & New problems</h2>
-            </section>
+          <section>
+          <h2>Switching pivot with angle constraints - GORY IMPL detail</h2>
+          <ul>
+          <li class="fragment">In addition to previous steps for switching pivot we also need to reassigned joint angle clamps</li>
+          <li class="fragment">Due to sigma term in angle reassignment, first and last angles cannot be clamped</li>
+          </ul>
+          </section>
+          <section>
+          <h2>2 arm as 4R</h2>
+          <img width="800px" src="media/images/3.0.intro.gif"/>
+          </section>
+          <section>
+          <h2>Gravity</h2>
+          <ul>
+            <li class="fragment">Adding gravity term to the loss function for gradient descent</li>
+            <li class="fragment"><img width="500px" src="media/images/gra1.png"/></li>
+            <li class="fragment"><img width="400px" src="media/images/gra2.png"/> <img width="400px" src="media/images/gra3.png"/></li>
+            <li class="fragment"><img width="200px" src="media/images/gra4.png"/></li>
+            <li class="fragment">Everything is expressed in terms of joint angles</li>
+          </ul>
+          </section>
+          <section>
+          <h2>Gravity - impl detail</h2>
+          <ul>
+            <li class="fragment">As is the time complexity of calculating these terms is $O(N^3)$</li>
+            <li class="fragment">But using substructres (dynamic programming) we can bring it down to $O(N^2)$</li>
+          </ul>
+          </section>
+          <section>
+          <h2>with and without gravity</h2>
+          <img width="1600px" src="media/images/3.1.com.gif"/>
+          </section>
         </section>
 
         <section>
-            <section>
-            <h2>Montecarlo methods</h2>
-            </section>
+          <section>
+          <h2>New problems</h2>
+          <ul>
+            <li class="fragment">Constraints + Gradient descent = local minima</li>
+            <li class="fragment">Can be mitigated but still a core problem</li>
+          </ul>
+          <img class="fragment" width="800px" src="media/images/4.0.local_minima.gif"/>
+          </section>
+          <section>
+          <h2>Montecarlo methods - Arbitrarly close global IK solves</h2>
+          <ul>
+            <li class="fragment">To prevent bad local minima we need general global IK solves</li>
+            <li class="fragment">But there are none for n > 2!</li>
+            <li class="fragment">So comprimise. Go for approximate global solves</li>
+          </ul>
+          </section>
+          <section>
+          <h2>No prior random sample solve</h2>
+          <ul>
+            <li class="fragment">Given a goal free end position, sample many joint angle tuples within clamps</li>
+            <li class="fragment">Compute the loss function for each tuple</li>
+            <li class="fragment">Keep track of tuple that gives closest to goal</li>
+            <li class="fragment">Can be made arbitrarily close to global optimum</li>
+            <li class="fragment">Parallelizable</li>
+          </ul>
+          </section>
+          <section>
+          <h2>No prior random sample solve</h2>
+          <img width="400px" src="media/images/4.0.local_minima.gif"/>
+          <img width="400px" src="media/images/4.1.solve_local_minima.gif"/>
+          </section>
+          <section>
+          <h2>Current state random sample solve</h2>
+          <ul>
+            <li class="fragment">Similar to no prior random sample solve</li>
+            <li class="fragment">Instead of uniformly sampling the tuple in the clamps space, start from current joint angle space</li>
+            <li class="fragment">Sample around the current state, keep track of best tuple, and repeat from there</li>
+            <li class="fragment">More prone to local minima than former, but faster</li>
+            <li class="fragment">Can be made arbitrarily close to global optimum</li>
+            <li class="fragment">Parallelizable</li>
+          </ul>
+          </section>
+          <section>
+          <h2>Integration with gradient descent</h2>
+          <ul>
+            <li class="fragment">Since monte carlo methods bring approximately close to goal, use gradient descent from there to snap to goal</li>
+            <li class="fragment">In practice</li>
+          </ul>
+          <img class="fragment" width="800px" src="media/images/snapping.png"/>
+          </section>
+          <section>
+          <h2>Perks</h2>
+          <ul>
+            <li class="fragment">Due to impl detail, clamps could not be enfored on first and last angles</li>
+            <li class="fragment">But with monte carlo methods we can enforce (pseudo) clamps while sampling</li>
+          </ul>
+          <img class="fragment" width="400px" src="media/images/5.0.wrong_side.gif"/>
+          <img class="fragment" width="400px" src="media/images/5.1.solve_wrong_side.gif"/>
+          </section>
+          <section>
+          <h2>Perks</h2>
+          <ul>
+            <li class="fragment">Due to nature of monte carlo solves the generated motion has variance even during IK phase</li>
+          </ul>
+          <img class="fragment" width="800px" src="media/images/6.4.out.gif"/>
+          </section>
+          <section>
+          <h2>Matching hands</h2>
+          <ul>
+            <li>Always switching pivots won't work</li>
+          </ul>
+          <img width="800px" src="media/images/7.2.switching_failure.gif"/>
+          </section>
+          <section>
+          <h2>Matching hands</h2>
+          <ul>
+            <li class="fragment">Simple climbers solution, match hands</li>
+            <li class="fragment">If agent is reaching with left hand but goal on on right of pivot (or) If agent is reaching with right hand but goal on on left of pivot</li>
+          </ul>
+          <img class="fragment" width="600px" src="media/images/7.3.matching.gif"/>
+          </section>
         </section>
 
         <section>

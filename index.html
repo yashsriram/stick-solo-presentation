@@ -30,7 +30,58 @@
           </p>
         </section>
 
-        <section>TODO: my intro, interests hobbies, motion planning, particle systems, physics, sixth sense, escape room, drive, project demo clips, climbing clips</section>
+        <section>
+          <section>
+            TODO: motion planning, particle systems, physics, sixth sense, escape room, drive, climbing clips
+              <ul>
+              <li class="fragment">Yashasvi Sriram</li>
+              <li class="fragment">@buggedbit</li>
+              <li class="fragment">MS, CS @ UMN</li>
+              <li class="fragment">BTech, CSE @ IIT Bombay</li>
+              </ul>
+          </section>
+          <section>
+              <h2>Interests</h2>
+              <ul>
+              <li class="fragment">Bringing math to life</li>
+              <li class="fragment">Adventures</li>
+              <li class="fragment">Climbing, Paddle sports, Surfing</li>
+              <li class="fragment">Trying new things in general</li>
+              </ul>
+          </section>
+          <section>
+              <h2>PRM/A*</h2>
+              <img width="200px" src="media/motion-planning/graph_search/dfs.png">
+              <img width="200px" src="media/motion-planning/graph_search/bfs.png">
+              <img width="200px" src="media/motion-planning/graph_search/ucs.png">
+              <img width="200px" src="media/motion-planning/graph_search/a_star.png">
+              <img width="200px" src="media/motion-planning/graph_search/weighted_astar.png">
+              <img width="400px" src="media/motion-planning/graph_search/time_comparision.png">
+          </section>
+          <section>
+              <h2>RRT</h2>
+              <img width="200px" src="media/motion-planning/rrt/1.png">
+              <img width="200px" src="media/motion-planning/rrt/2.png">
+              <img width="200px" src="media/motion-planning/rrt/3.png">
+              <img width="200px" src="media/motion-planning/rrt/4.png">
+              <h2>RRT*</h2>
+              <img width="200px" src="media/motion-planning/rrtstar/1.png">
+              <img width="200px" src="media/motion-planning/rrtstar/2.png">
+              <img width="200px" src="media/motion-planning/rrtstar/3.png">
+              <img width="200px" src="media/motion-planning/rrtstar/4.png">
+          </section>
+          <section>
+              <h2>Line agents</h2>
+              <img width="300px" src="media/motion-planning/line/1.png">
+              <img width="300px" src="media/motion-planning/line/2.png">
+              <img width="300px" src="media/motion-planning/line/3.png">
+              <img width="300px" src="media/motion-planning/line/4.png">
+          </section>
+          <section>
+              <h2>Elastic planning</h2>
+              <img width="800px" src="media/images/9.gen-orrt-vis-sideview.gif">
+          </section>
+        </section>
 
         <section>
           <section>
@@ -456,9 +507,10 @@
             <section>
             <h2>Cons - Until now</h2>
             <ol>
-              <li class="fragment">4R is good but not generalizable</li>
+              <li class="fragment">4R is good but solve is not generalizable for 4 arm agent</li>
+              <li class="fragment">i.e. not very composable</li>
               <li class="fragment">Should not have to write code specific to agent topology</li>
-              <li class="fragment">Monte carlo method becomes quickly untracable as number of links increases</li>
+              <li class="fragment">Monte carlo method becomes quickly untracable as chain size increases</li>
             </ol>
             <ul>
             </ul>
@@ -489,33 +541,241 @@
           <table>
             <tbody>
               <tr>
-                <th style="padding: 0">4R (chain)</th>
-                <th style="padding: 0">2 x 2R (tree)</th>
+                <td style="padding: 0">4R (chain)</td>
+                <td style="padding: 0">2 x 2R (tree)</td>
               </tr>
               <tr class="fragment">
-                <th style="padding: 0"><img width="400px" src="media/images/4R.png"/></th>
-                <th style="padding: 0"><img width="400px" src="media/images/2x2R.png"/></th>
+                <td style="padding: 0"><img width="400px" src="media/images/4R.png"/></td>
+                <td style="padding: 0"><img width="400px" src="media/images/2x2R.png"/></td>
               </tr>
               <tr class="fragment">
                 <td ><span style="font-size: 0.4em">both translation and rotation is transferred down the chain</span></td>
                 <td ><span style="font-size: 0.4em">hierarchical control, only translation is transferred down the tree</span></td>
               </tr>
               <tr class="fragment">
-                <th style="padding: 0"><img width="300px" src="media/images/4R-rot.png"/></th>
-                <th style="padding: 0"><img width="300px" src="media/images/2x2R-rot.png"/></th>
+                <td style="padding: 0"><img width="300px" src="media/images/4R-rot.png"/></td>
+                <td style="padding: 0"><img width="300px" src="media/images/2x2R-rot.png"/></td>
               </tr>
             </tbody>
           </table>
+          </section>
+          <section>
+            <h2>advantages</h2>
+            <ul>
+            <li class="fragment">hierarchically controlled</li>
+            <li class="fragment">move one chain agent its sub tree moves along with it</li>
+            <li class="fragment">inherently composable</li>
+            <li class="fragment">only have to plan IK for single chain at a time, can keep computation within bounds</li>
+            <li class="fragment">can model more types of animals</li>
+            </ul>
+          </section>
+          <section>
+            <h2>2 arm as 2x2R tree agent</h2>
+            <ul>
+              <li class="fragment">Has a arm goal and a non-holding arm</li>
+              <li class="fragment">PRM/A* and IK planners are already in place</li>
+              <li class="fragment">For a hold to hold transition, non-holding arm goal is set (which is the next goal)</li>
+              <li class="fragment">Just need to find a good holding arm goal (a.k.a neck position)</li>
+            </ul>
+          </section>
+          <section>
+            <h2>Finding good neck position</h2>
+            <ul>
+              <li class="fragment">In general this is a non-trivial task (as will be shown later)</li>
+              <li class="fragment">Just imagine where your neck goes to make your reaching hand reach the hold</li>
+              <li class="fragment">Best done using function approximators like neural networks</li>
+              <li class="fragment">No training data, but a loss function and a world, smells like RL</li>
+            </ul>
+          </section>
+          <section>
+            <h2>NN  - Input/output</h2>
+            <ul>
+              <li class="fragment">Since lower level IK take care of contiuous control, angles and angle clamps need not be an input</li>
+              <li class="fragment">Should only depend on pivot, lengths of links and current euclidean goal</li>
+              <li class="fragment">So NN is responsible for discrete control instead of contiuous control, huge burden off of the network!!</li>
+              <li class="fragment">NN is given the smallest task possible. Reflected in training times and effectiveness</li>
+              <li class="fragment">Only have to do the inference once per hold to hold transition rather than every tick</li>
+            </ul>
+          </section>
+          <section>
+            <h2>NN  - Input/output</h2>
+            <ul>
+              <li class="fragment">For shift and scale invariance, we input lengths and goal relative to pivot scaled w.r.t to sum of all lengths</li>
+              <li class="fragment">Input size = number of total links + 1</li>
+              <li class="fragment">Output is a 2-tuple specifying unscaled neck position</li>
+            </ul>
+          </section>
+          <section>
+            <h2>NN  - Reward function</h2>
+            <p>During the episode</p>
+            <ul>
+              <li class="fragment">Distance of neck to its goal</li>
+              <li class="fragment">Distance of reaching hand to its goal</li>
+              <li class="fragment">Value of center of mass relative y coordinate</li>
+              <li class="fragment">Distance of certer of mass x from its goal</li>
+            </ul>
+            <p>After the episode</p>
+            <ul>
+              <li class="fragment">High reward for reaching close to neck goal</li>
+              <li class="fragment">High reward for reaching close to actual goal</li>
+            </ul>
+          </section>
+          <section>
+            <h2>NN  - Layers</h2>
+            <ul>
+              <li class="fragment">Since the input and output is carefully and the job of NN is kept as small as possible</li>
+              <li class="fragment">A fully connected network with 2 hidden layers with each 16 nodes do well in experiments</li>
+              <li class="fragment">ReLU activation was used</li>
+            </ul>
+          </section>
+          <section>
+            <h2>NN  - Optimizor</h2>
+            <ul>
+              <li class="fragment">Cross entropy method is used for optimization</li>
+              <li class="fragment">Simple, works well for small tasks, easy to implement, parallelizable</li>
+            </ul>
+            <table class="fragment">
+              <thead>
+                <tr>
+                  <th style="padding: 0">Parameter</th>
+                  <th style="padding: 0">Value</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="padding: 0">Generations</td>
+                  <td style="padding: 0">500</td>
+                </tr>
+                <tr>
+                  <td style="padding: 0">Batch size</td>
+                  <td style="padding: 0">50</td>
+                </tr>
+                <tr>
+                  <td style="padding: 0">Num episodes</td>
+                  <td style="padding: 0">20</td>
+                </tr>
+                <tr>
+                  <td style="padding: 0">Num episode ticks</td>
+                  <td style="padding: 0">200</td>
+                </tr>
+                <tr>
+                  <td style="padding: 0">Elite frac</td>
+                  <td style="padding: 0">0.25</td>
+                </tr>
+                <tr>
+                  <td style="padding: 0">Noise factor</td>
+                  <td style="padding: 0">1</td>
+                </tr>
+              </tbody>
+            </table>
+          </section>
+          <section>
+            <h2>NN  - Parallelization speedup</h2>
+            <ul>
+              <li class="fragment">Parallelizing CEM on 8 CPU cores yielded 36\% speedup</li>
+            </ul>
+            <img class="fragment" width="500px" src="media/images/parallelization.png"/>
+          </section>
+          <section>
+            <h2>NN  - Viz</h2>
+            <ul>
+              <li >Given an agent, the NN is a function from $R^2 \rightarrow R^2$ (reaching goal to neck goal)</li>
+              <li >Nice visualization, useful for tuning hyper parameters and debugging</li>
+            </ul>
+            <img width="600px" src="media/images/11.1.gif"/>
+          </section>
+          <section>
+            <h2>NN  - Left and right networks</h2>
+            <ul>
+              <li class="fragment">Since it is so cheap to train networks we train one for each case</li>
+              <li class="fragment">This can be used to model different dexterous behavior</li>
+            </ul>
+            <img width="400px" src="media/images/11.2.gif"/>
+            <img width="400px" src="media/images/11.1.gif"/>
+          </section>
+          <section>
+            <h2>NN - Trained Policy Mag Dir Viz </h2>
+            <ul>
+              <li>The $R^2 \rightarrow R^2$ trained policy viz can be made using magnitude and direction graph pair</li>
+            </ul>
+            <img width="400px" src="media/images/left/zoomed_in.png"/>
+            <img width="500px" height="300px" src="media/images/left/direction.png"/>
+          </section>
+          <section>
+            <h2>NN - Trained Policy Texture Map Viz </h2>
+            <ul>
+              <li>The $R^2 \rightarrow R^2$ trained policy viz can be made using texture mapping</li>
+            </ul>
+            <img width="800px" src="media/images/11.3.gif"/>
+          </section>
+        </section>
+
+        <section>
+          <section>
+          <h2>Testing</h2>
+          <ul>
+            <li class="fragment">A climbing route with left, right, diagonal, up and down movements is chosen to compare various methods</li>
+          </ul>
+          </section>
+          <section>
+          <h2>Vanilla gradient descent - 2 arm as 4R</h2>
+          <img width="800px" src="media/images/8.1.gd.gif"/>
+          </section>
+          <section>
+          <h2>Monte carlo methods - 2 arm as 4R </h2>
+          <img width="400px" src="media/images/8.3.nprs.gif"/>
+          <img width="400px" src="media/images/8.4.csrs.gif"/>
+          </section>
+          <section>
+          <h2>NN policy - 2 arm as 2x2R </h2>
+          <img width="800px" src="media/images/12.gif"/>
           </section>
         </section>
 
         <section>
             <section>
-            <h2>Summary and roadmap and impact</h2>
+            <h2>Planning hierarchy - Until now</h2>
+            <ol>
+              <li class="fragment">Hold space planning using PRM/A*</li>
+              <li class="fragment">Neck goal using Cross entropy optimized neural network</li>
+              <li class="fragment">IK using monte carlo solves + gradient descent snapping</li>
+            </ol>
+            </section>
+            <section>
+            <h2>Computational bottlenecks - Until now</h2>
+            <ul>
+              <li class="fragment">Monte carlo sampling</li>
+              <li class="fragment">IK gradient descent step - matrix multiplications or inverses</li>
+              <li class="fragment">Neural network training but it can be done before climbing</li>
+            </ul>
+            </section>
+            <section>
+            <h2>Pros - Until now</h2>
+            <ol>
+              <li class="fragment">Reasonable reachability guarantees</li>
+              <li class="fragment">Multi limb coordination</li>
+              <li class="fragment">Prevent unwanted poses</li>
+              <li class="fragment">Gravity effects</li>
+              <li class="fragment">Pretty good motion</li>
+              <li class="fragment">Varied motion generation even in IK phase</li>
+              <li class="fragment">Can be extended to larger tree structure with reasonable effort</li>
+            </ol>
+            </section>
+            <section>
+            <h2>Cons - Until now</h2>
+            <ol>
+              <li class="fragment">Does not handle the cases where the agent pivots using two ends</li>
+              <li class="fragment">Since no datasets are used all heuristics are based on our judgment and may fail for any practical use</li>
+              <li class="fragment">Snapping using gradient descent is flimsy due to vanishing gradients problem</li>
+            </ol>
             </section>
             <section>
             <h2>Future work</h2>
-            Scaling / composing for general tree agent
+            <ol>
+              <li class="fragment">Extrapolate to larger tree structures</li>
+              <li class="fragment">Handle simultaneous pivot dynamics</li>
+              <li class="fragment">Multiple tree agent coordination?</li>
+            </ol>
             </section>
         </section>
       </div>

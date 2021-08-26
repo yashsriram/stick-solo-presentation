@@ -29,11 +29,11 @@
           </p>
         </section>
 
-        <section>my intro, interests hobbies, project demo clips, climbing clips</section>
+        <section>TODO: my intro, interests hobbies, motion planning, particle systems, physics, sixth sense, escape room, drive, project demo clips, climbing clips</section>
 
         <section>
           <section>
-          the problem
+            <h2>the problem</h2>
           </section>
           <section>
             <h2>the world</h2>
@@ -42,7 +42,7 @@
             <li class="fragment">points representing holds</li>
             <li class="fragment">has a start hold and a finish hold</li>
             </ul>
-            <img class="fragment" width="500px" src="media/world.png">
+            <img class="fragment" width="500px" src="media/images/world.png">
           </section>
           <section>
             <h2>chain agent</h2>
@@ -53,11 +53,11 @@
             <li class="fragment">controlled via joint angles</li>
             <li class="fragment">N line segments gives N "R" joints (including latch)</li>
             </ul>
-            <img class="fragment" width="800px" src="media/4R.png">
+            <img class="fragment" width="800px" src="media/images/4R.png">
           </section>
           <section>
             Other chains
-            <img src="media/chains.png">
+            <img src="media/images/chains.png">
           </section>
           <section>
             <h2>tree agent</h2>
@@ -66,11 +66,11 @@
             <li class="fragment">one free end of a chain agent can latch to a hold in wall</li>
             <li class="fragment">controlled via joint angles, but has hierarchical control</li>
             </ul>
-            <img class="fragment" width="800px" src="media/2x2R.png">
+            <img class="fragment" width="800px" src="media/images/2x2R.png">
           </section>
           <section>
             3 x 2R can be in two configurations, note the coincident controls and multiple free ends
-            <img src="media/3x2R.png">
+            <img src="media/images/3x2R.png">
           </section>
           <section>
           <table>
@@ -80,16 +80,16 @@
                 <th style="padding: 0">2 x 2R (tree)</th>
               </tr>
               <tr class="fragment">
-                <th style="padding: 0"><img width="400px" src="media/4R.png"/></th>
-                <th style="padding: 0"><img width="400px" src="media/2x2R.png"/></th>
+                <th style="padding: 0"><img width="400px" src="media/images/4R.png"/></th>
+                <th style="padding: 0"><img width="400px" src="media/images/2x2R.png"/></th>
               </tr>
               <tr class="fragment">
                 <td ><span style="font-size: 0.4em">both translation and rotation is transferred down the chain</span></td>
                 <td ><span style="font-size: 0.4em">hierarchical control, only translation is transferred down the tree</span></td>
               </tr>
               <tr class="fragment">
-                <th style="padding: 0"><img width="300px" src="media/4R-rot.png"/></th>
-                <th style="padding: 0"><img width="300px" src="media/2x2R-rot.png"/></th>
+                <th style="padding: 0"><img width="300px" src="media/images/4R-rot.png"/></th>
+                <th style="padding: 0"><img width="300px" src="media/images/2x2R-rot.png"/></th>
               </tr>
             </tbody>
           </table>
@@ -112,6 +112,147 @@
             <li class="fragment">Super fun to watch agents/robots climb walls</li>
             </ul>
         </section>
+
+        <section>
+            <section>
+            <h2>related work</h2>
+            </section>
+            <section>
+              Lot of recent progress in character animation for walking, running, jumping, dribling, swimming
+
+              TODO: add gifs and cite
+            </section>
+            <section>
+              Not a lot explicity in climbing
+
+              TODO: add gifs and cite
+            </section>
+        </section>
+
+        <section>
+            <h2>approach</h2>
+        </section>
+
+        <section>
+            <section>
+            <h2>PRM/A* + IK</h2>
+            <ul>
+            <li class="fragment">Split the task</li>
+            <li class="fragment">Plan in holds space using Probabilistic Roadmap and A*(or D*-Lite) search</li>
+            <li class="fragment">Move from hold to hold using Inverse Kinematics</li>
+            </ul>
+            </section>
+            <section>
+            <h3>simplest case - 2R chain - IK</h3>
+            <img class="fragment" width="200px" src="media/images/2R-ana.png" />
+            <ul>
+            <li class="fragment">Free end spans a concentric donut with inner and outer radii $| l_1 - l_2 |$ and $l_1 + l_2$</li>
+            <li class="fragment">Given goal point is in the span</li>
+            </ul>
+            <img class="fragment" width="300px" src="media/images/2R-ana-e1.png" />
+            <img class="fragment" width="250px" src="media/images/2R-ana-e2.png" />
+            <img class="fragment" width="250px" src="media/images/2R-ana-e3.png" />
+            <ul>
+            <li class="fragment">$ l = 0 \rightarrow l_1 = l_2 \& (x, y) = (0, 0) \rightarrow \theta_2 = 180^\circ $</li>
+            </section>
+            <section>
+            <h3>simplest case - 2R chain - IK</h3>
+            <li class="fragment">Analytical solve for goal joint angles given a goal point in the span</li>
+            <li class="fragment">Linearly interpolate from current joint angles to goal joint angles</li>
+            <li class="fragment">Switch pivot once reached</li>
+            </ul>
+            </section>
+            <section>
+            <h3>simplest case - 2R chain - PRM</h3>
+            <ul>
+            <li class="fragment">PRM edge lens can be clamped b/w $| l_1 - l_2 |$ and $l_1 + l_2$ to ensure reachability of free end</li>
+            </ul>
+            </section>
+            <section>
+            <h3>simplest case - 2R chain - demo</h3>
+            <p>BG: joint angle space, Red: goal, Blue: current</p>
+            <video width="500px" controls src="media/videos/2R-ANA.mp4"></video>
+            </section>
+            <section>
+            <h3>simplest case - 2R chain - tradeoffs</h3>
+            <ul>
+              <li class="fragment">With proper PRM edge lens, PRM path existence guarantees reachability</li>
+              <li class="fragment">One IK solve per hold in the PRM generated path</li>
+            </ul>
+            </section>
+            <section>
+            <h3>nR chain - IK</h3>
+            <ul>
+            <li class="fragment">Too many degrees of freedom, therefore no general analytical solution</li>
+            <li class="fragment">Employ iterative solutions</li>
+            </ul>
+            </section>
+            <section>
+            <h3>nR chain - IK - Jacobian Transpose</h3>
+            <li class="fragment">Given goal point is in the span</li>
+            <img class="fragment" width="300px" src="media/images/nR-JT1.png" />
+            <img class="fragment" width="250px" src="media/images/nR-JT2.png" />
+            <img class="fragment" width="250px" src="media/images/nR-JT3.png" />
+            <li class="fragment">simple, fast, looks natural, decently numerically stable</li>
+            <li class="fragment">might take long time to converge depending on gradient magnitude</li>
+            </section>
+            <section>
+            <h3>Ex. 4R chain - Jacobian Transpose</h3>
+            <video width="500px" controls src="media/videos/4R-JT.mp4"></video>
+            </section>
+            <section>
+            <h3>nR chain - IK - Pseudo Inverse</h3>
+            <li class="fragment">Given goal point is in the span</li>
+            <img class="fragment" width="300px" src="media/images/nR-PI1.png" />
+            <img class="fragment" width="250px" src="media/images/nR-PI2.png" />
+            <li class="fragment">produces shorted free end path</li>
+            <li class="fragment">contains matrix inversion, so can be numerically unstable</li>
+            </section>
+            <section>
+              <h3>Ex. 4R chain - Pseudo Inverse</h3>
+            <video width="500px" controls src="media/videos/4R-PSI.mp4"></video>
+            </section>
+            <section>
+            <h3>nR chain - tradeoffs</h3>
+            <ul>
+              <li class="fragment">With proper PRM edge lens, PRM path existence guarantees reachability</li>
+              <li class="fragment">One IK gradient step per tick</li>
+              <li class="fragment">Multiple solutions exist, no control over what we are convering onto</li>
+            </ul>
+            </section>
+            <section>
+              <h3>nR chain - n >> 1 - can simulate worms</h3>
+            <video width="500px" controls src="media/videos/nR-worm.mp4"></video>
+            </section>
+        </section>
+
+        <section>
+            <section>
+            <h2>Climb cycle</h2>
+            </section>
+        </section>
+
+        <section>
+            <section>
+            <h2>New Constraints & New problems</h2>
+            </section>
+        </section>
+
+        <section>
+            <section>
+            <h2>Montecarlo methods</h2>
+            </section>
+        </section>
+
+        <section>
+            <section>
+            <h2>Summary and roadmap and impact</h2>
+            </section>
+            <section>
+            <h2>Future work</h2>
+            Scaling / composing for general tree agent
+            </section>
+        </section>
       </div>
     </div>
 
@@ -119,15 +260,21 @@
     <script src="plugin/notes/notes.js"></script>
     <script src="plugin/markdown/markdown.js"></script>
     <script src="plugin/highlight/highlight.js"></script>
+    <script src="plugin/math/math.js"></script>
     <script>
       // More info about initialization & config:
       // - https://revealjs.com/initialization/
       // - https://revealjs.com/config/
       Reveal.initialize({
         hash: true,
-
+        math: {
+          mathjax: 'https://cdn.jsdelivr.net/gh/mathjax/mathjax@2.7.8/MathJax.js',
+          config: 'TeX-AMS_HTML-full',
+          // pass other options into `MathJax.Hub.Config()`
+          TeX: { Macros: { RR: "{\\bf R}" } }
+        },
         // Learn about plugins: https://revealjs.com/plugins/
-        plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ]
+        plugins: [ RevealMarkdown, RevealHighlight, RevealNotes, RevealMath ]
       });
     </script>
   </body>
